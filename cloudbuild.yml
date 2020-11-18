@@ -25,6 +25,7 @@ steps:
         "$PROJECT_ID", # We are naming the cloudrun service the same as our project id
         "--image",
         "gcr.io/$PROJECT_ID/my_app:latest",
+        "--no-traffic", # Add this line
         "--region",
         "australia-southeast1",
         "--platform",
@@ -33,16 +34,16 @@ steps:
 
   # Switch 50% of all traffic over to the latest version.
   - name: "gcr.io/cloud-builders/gcloud"
-    args: [
-        "run",
-        "services",
-        "update-traffic",
-        "$PROJECT_ID", # We are naming the cloudrun service the same as our project id
-        "--to-latest",
-        "--region",
-        "australia-southeast1",
-        "--platform",
-        "managed",
-      ]
+  args: [
+      "run",
+      "services",
+      "update-traffic",
+      "$PROJECT_ID",
+      "--to-revisions=LATEST=50", 
+      "--region",
+      "australia-southeast1",
+      "--platform",
+      "managed",
+    ]
 
 timeout: 800s
